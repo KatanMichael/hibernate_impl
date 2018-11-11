@@ -6,10 +6,9 @@ import org.hibernate.cfg.Configuration;
 
 import com.max.hibernate.demo.entity.Student;
 
-public class PrimaryKeyDemo {
+public class DeleteStudentDemo {
 
 	public static void main(String[] args) {
-
 		// create session factory
 		SessionFactory factory = new Configuration()
 				.configure("hibernate.cfg.xml")
@@ -20,30 +19,36 @@ public class PrimaryKeyDemo {
 		Session session = factory.getCurrentSession();
 		
 		try {
-			// use the session object to save save object			
-			// create 3 student objects
-			System.out.println("creating 3 student objects");
-			Student tempStudent1 = new Student("Chuck","Norris","norris@gmail.com");
-			Student tempStudent2 = new Student("Jacky","Chan","chan@hit.ac.il");
-			Student tempStudent3 = new Student("Bruce","Lee","lee@yahoo.com");
-
-			// start a transaction
+			
+			int studenId = 1;
+	
+			// now get a new session and start transaction
+			session = factory.getCurrentSession();
 			session.beginTransaction();
-			// save the student object
-			System.out.println("saving the students");
-			session.save(tempStudent1);
-			session.save(tempStudent2);
-			session.save(tempStudent3);
+		
+			// retrieve student based on id : primary key
+		
+			System.out.println("getting student with id: "+ studenId);
+			Student myStudent = session.get(Student.class, studenId);
+			
+//			// delete the student 1
+//			// method 1
+//			System.out.println("deleting student" +myStudent);
+//			session.delete(myStudent);
+			
+			// delete the student 2
+			// method 2
+			System.out.println("deleting student" +myStudent+1);
+			session.createQuery("delete from Student where id=2").executeUpdate();
+			
 			// commit the transaction
 			session.getTransaction().commit();
+			
+		
 			System.out.println("Done.");
 		} finally {
 			factory.close();
 		}
-		
-		
 	}
 
-	}
-
-
+}
